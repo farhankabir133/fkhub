@@ -47,6 +47,16 @@
             background-size: cover;
             object-fit: cover;
         }
+        .typed-cursor {
+            font-size: 2.5rem;
+            color: #ff014f;
+        }
+
+        .typed {
+            color: #ff014f;
+            font-weight: 700;
+            font-size: 2.5rem;
+        }
     </style>
 </head>
 
@@ -137,7 +147,7 @@
         <!-- Mobile Menu Starts -->
         <nav role="navigation" class="d-block d-lg-none">
             <div id="menuToggle">
-                <input type="checkbox" />
+                <input type="checkbox"/>
                 <span></span>
                 <span></span>
                 <span></span>
@@ -145,7 +155,6 @@
                     <li class="active"><a href="index.html"><i class="fa fa-home"></i><span>Home</span></a></li>
                     <li><a href="about.html"><i class="fa fa-user"></i><span>About</span></a></li>
                     <li><a href="portfolio.html"><i class="fa fa-folder-open"></i><span>Portfolio</span></a></li>
-          
                     <li><a href="contact.html"><i class="fa fa-envelope-open"></i><span>Contact</span></a></li>
                     <li><a href="blog.html"><i class="fa fa-comments"></i><span>Blog</span></a></li>
                 </ul>
@@ -163,28 +172,48 @@
                 <div>
                     <img src="https://farhankabir133.github.io/fkhub/img/image3.png" class="img-fluid main-img-mobile d-none d-sm-block d-lg-none" alt="my picture" />
                     <h6 class="text-uppercase open-sans-font mb-0 d-block d-sm-none d-lg-block">hi there !</h6>
-                    <h1 class="text-uppercase poppins-font"><span>I'm</span> farhan kabir</h1>
+                    <h1 class="text-uppercase poppins-font">
+                        <span>I'm </span>
+                        <span class="typed changing-color"></span>
+                    </h1>
+
                     <p class="open-sans-font" style="text-align: justify;">
                         <strong>I'm an international web designer, full-stack developer, and Flutter developer dedicated to delivering intuitive, user-centric digital solutions. I have a passion for crafting high-quality software and mobile applications that simplify tasks and enhance the overall user experience, making lives easier.</strong>
                     </p>
                     <p class="open-sans-font" style="text-align: justify;">
-                        <strong>As a full-stack web developer in the freelance market, I excel at crafting clean, efficient code and ensuring precise, visually appealing designs. My expertise lies in building dynamic, interactive websites with
-                        seamless animations that boost user engagement.
-                         I also emphasize responsive design, making sure that each site adapts flawlessly to various screen sizes whether it's a desktop, tablet, or smartphone for a smooth and consistent user experience across all devices.</p></strong>
+                        <strong>As a full-stack web developer in the freelance market, I excel at crafting clean, efficient code and ensuring precise, visually appealing designs. My expertise lies in building dynamic, interactive websites with seamless animations that boost user engagement. I also emphasize responsive design, making sure that each site adapts flawlessly to various screen sizes whether it's a desktop, tablet, or smartphone for a smooth and consistent user experience across all devices.</p></strong>
                     <a href="about.html" class="btn btn-dark">more about me</a>
                 </div>
             </div>
         </div>
     </section>
-
+    
+    <!-- CSS for changing colors -->
+    <style>
+        @keyframes colorChange {
+            0% { color: #ff014f; }
+            25% { color: #14a1ff; }
+            50% { color: #14ff5f; }
+            75% { color: #f0e14c; }
+            100% { color: #ff014f; }
+        }
+    
+        .changing-color {
+            animation: colorChange 5s infinite;
+            font-weight: 700;
+        }
+    </style>
+    
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
     <script>
-        var typed = new Typed(".input", {
-            strings: ["Alexa", "Web Developer", "UI Designer"],
-            typeSpeed:100,
-            backSpeed: 100,
+        var typed = new Typed(".typed", {
+            strings: ["Farhan Kabir!!!"],
+            typeSpeed: 100,
+            backSpeed: 50,
             loop: true
         });
     </script>
+    
 
     <!--js files-->
     <script src="js/jquery-3.5.0.min.js"></script>
