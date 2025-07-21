@@ -33,6 +33,7 @@ Below is a guide on how the website is deployed to GitHub Pages from scratch, so
 
 * Build your static website files: `index.html`, `style.css`, and optionally any JS or image assets.
 * Test it locally by opening `index.html` in a browser to make sure it works.
+* For the Contact Page , I applied Emailjs [Backend] for receiving messages from public.
 
 ### 2️⃣ **Create a GitHub Repository**
 
