@@ -1,17 +1,3 @@
-Farhan Kabir's Portfolio Website
-
-
-
-Here’s a **complete and professional `README.md`** for your website repository:
-
-✅ Includes:
-
-* Introduction
-* Tools & Technologies used
-* Step-by-step deployment guide
-
----
-
 # fkhub
 
 ## 🌐 Introduction
@@ -122,4 +108,3 @@ Built & maintained by [Farhan Kabir](https://github.com/farhankabir133).
 
 ---
 
-If you’d like, I can also generate a Markdown file for download, or help you craft a LICENSE file and `.gitignore` as well. Let me know!
