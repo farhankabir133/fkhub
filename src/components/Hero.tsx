@@ -53,7 +53,7 @@ const Hero: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            Full Stack Developer - UI/UX Designer - AI Enthusiast
+            Full Stack Developer - UI/UX Designer - AI Enthusiast
           </motion.span>
         </motion.div>
         <motion.p

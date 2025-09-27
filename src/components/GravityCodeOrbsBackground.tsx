@@ -347,20 +347,20 @@ const GravityCodeOrbsBackground: React.FC = () => {
         style={{ zIndex: 1 }}
       />
       {/* Customization UI for first orb and speed */}
-      <div className="absolute top-4 left-4 bg-black/70 rounded-xl p-4 z-20 flex flex-col gap-2 text-white shadow-lg" style={{ minWidth: 240 }}>
-        <div className="font-bold mb-1">Customize Main Orb</div>
-        <div className="flex gap-2 mb-2">
+      <div className="absolute top-4 left-4 bg-black/70 rounded-xl p-3 md:p-4 z-20 flex flex-col gap-3 text-white shadow-lg md:min-w-[240px]">
+        <div className="font-bold mb-1 hidden md:block">Customize Main Orb</div>
+        <div className="hidden md:flex gap-2 mb-2">
           {COLORS.map(c => (
             <button key={c} className="w-6 h-6 rounded-full border-2" style={{ background: c, borderColor: ui.color === c ? '#fff' : 'transparent' }} onClick={() => handleColor(c)} />
           ))}
         </div>
-        <div className="flex gap-2 mb-2">
+        <div className="hidden md:flex gap-2 mb-2">
           {(['circle', 'hex', 'cube'] as const).map(shape => (
             <button key={shape} className={`px-2 py-1 rounded ${ui.shape === shape ? 'bg-amber-400 text-black' : 'bg-slate-700'}`} onClick={() => handleShape(shape)}>{shape}</button>
           ))}
         </div>
-        <textarea className="w-full bg-slate-900 rounded p-2 text-xs text-white" rows={3} value={ui.code} onChange={handleCode} />
-        <div className="flex flex-col gap-1 mt-2">
+        <textarea className="w-full bg-slate-900 rounded p-2 text-xs text-white hidden md:block" rows={3} value={ui.code} onChange={handleCode} />
+        <div className="flex flex-col gap-1">
           <label htmlFor="orb-speed-slider" className="text-xs font-semibold">Orb Speed: <span className="text-amber-400">{speed.toFixed(1)}x</span></label>
           <input
             id="orb-speed-slider"
@@ -372,7 +372,7 @@ const GravityCodeOrbsBackground: React.FC = () => {
             onChange={e => setSpeed(Number(e.target.value))}
             className="w-full accent-amber-400"
           />
-          <div className="text-xs text-slate-400">Use <kbd>+</kbd>/<kbd>-</kbd> to adjust speed</div>
+          <div className="text-xs text-slate-400 hidden md:block">Use <kbd>+</kbd>/<kbd>-</kbd> to adjust speed</div>
         </div>
       </div>
     </>

@@ -104,7 +104,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose, isDarkMode }) 
     });
 
     try {
-      // Check if user is asking about hiring/connecting
       const connectKeywords = ['hire', 'contact', 'connect', 'work together', 'collaborate', 'project'];
       const isConnectIntent = connectKeywords.some(keyword => 
         userMessage.content.toLowerCase().includes(keyword)
@@ -125,12 +124,10 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose, isDarkMode }) 
 
       setMessages(prev => [...prev, assistantMessage]);
 
-      // Speak response if voice is enabled
       if (isVoiceEnabled && !speaking) {
         speak({ text: response });
       }
 
-      // Update context
       const newTopics = extractTopics(userMessage.content);
       setContext(prev => ({
         ...prev,
@@ -224,7 +221,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose, isDarkMode }) 
     if (isConnected) {
       disconnect();
     } else {
-      const connector = connectors[0]; // MetaMask or first available
+      const connector = connectors[0];
       if (connector) {
         connect({ connector });
         analytics.track('wallet_connected', { session_id: sessionId });
@@ -235,28 +232,27 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose, isDarkMode }) 
   const extractTopics = (message: string): string[] => {
     const topics = [];
     const lowerMessage = message.toLowerCase();
-    
     if (lowerMessage.includes('project') || lowerMessage.includes('work')) topics.push('projects');
     if (lowerMessage.includes('skill') || lowerMessage.includes('technology')) topics.push('skills');
     if (lowerMessage.includes('experience') || lowerMessage.includes('background')) topics.push('experience');
     if (lowerMessage.includes('contact') || lowerMessage.includes('hire')) topics.push('contact');
-    
     return topics;
   };
 
   const extractInterests = (message: string): string[] => {
     const interests = [];
     const lowerMessage = message.toLowerCase();
-    
     if (lowerMessage.includes('react') || lowerMessage.includes('frontend')) interests.push('Frontend Development');
     if (lowerMessage.includes('backend') || lowerMessage.includes('api')) interests.push('Backend Development');
     if (lowerMessage.includes('design') || lowerMessage.includes('ui')) interests.push('UI/UX Design');
     if (lowerMessage.includes('mobile') || lowerMessage.includes('app')) interests.push('Mobile Development');
-    
     return interests;
   };
 
   if (!isOpen) return null;
+
+  const minimizedClasses = 'w-80 h-16';
+  const maximizedClasses = 'w-[calc(100vw-2rem)] h-[75vh] md:w-96 md:h-[600px]';
 
   return (
     <AnimatePresence>
@@ -265,28 +261,20 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose, isDarkMode }) 
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.8, y: 20 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className={`fixed bottom-24 right-6 z-40 ${
-          isMinimized ? 'w-80 h-16' : 'w-96 h-[600px]'
-        } max-w-[calc(100vw-2rem)] max-h-[calc(100vh-8rem)]`}
+        className={`fixed bottom-4 right-4 md:bottom-24 md:right-6 z-40 ${isMinimized ? minimizedClasses : maximizedClasses} max-w-[calc(100vw-2rem)] max-h-[calc(100vh-8rem)]`}
       >
-        <div className={`w-full h-full rounded-2xl shadow-2xl backdrop-blur-md border overflow-hidden ${
-          isDarkMode 
-            ? 'bg-slate-800/95 border-slate-700/50' 
-            : 'bg-white/95 border-white/20'
-        }`}>
+        <div className={`w-full h-full rounded-2xl shadow-2xl backdrop-blur-md border overflow-hidden flex flex-col ${isDarkMode ? 'bg-slate-800/95 border-slate-700/50' : 'bg-white/95 border-white/20'}`}>
           {/* Header */}
-          <div className={`flex items-center justify-between p-4 border-b ${
-            isDarkMode ? 'border-slate-700/50' : 'border-gray-200/50'
-          }`}>
+          <div className={`flex items-center justify-between p-3 md:p-4 border-b ${isDarkMode ? 'border-slate-700/50' : 'border-gray-200/50'}`}>
             <div className="flex items-center gap-3">
               <div className="relative">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
                   <Bot className="w-4 h-4 text-white" />
                 </div>
                 <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
               </div>
               <div>
-                <h3 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                <h3 className={`font-semibold text-sm md:text-base ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                   Farhan's AI Assistant
                 </h3>
                 <p className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>
@@ -295,56 +283,28 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose, isDarkMode }) 
               </div>
             </div>
             
-            <div className="flex items-center gap-2">
-              {/* Voice Toggle */}
+            <div className="flex items-center gap-1 md:gap-2">
               <button
                 onClick={() => setIsVoiceEnabled(!isVoiceEnabled)}
-                className={`p-2 rounded-lg transition-colors ${
-                  isVoiceEnabled
-                    ? 'bg-blue-500 text-white'
-                    : isDarkMode 
-                      ? 'text-slate-400 hover:text-white hover:bg-slate-700' 
-                      : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
-                }`}
-              >
+                className={`p-2 rounded-lg transition-colors hidden md:block ${isVoiceEnabled ? 'bg-blue-500 text-white' : isDarkMode ? 'text-slate-400 hover:text-white hover:bg-slate-700' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'}`}>
                 {isVoiceEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
               </button>
 
-              {/* Wallet Connect */}
               <button
                 onClick={handleWalletConnect}
-                className={`p-2 rounded-lg transition-colors ${
-                  isConnected
-                    ? 'bg-green-500 text-white'
-                    : isDarkMode 
-                      ? 'text-slate-400 hover:text-white hover:bg-slate-700' 
-                      : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
-                }`}
-              >
+                className={`p-2 rounded-lg transition-colors hidden md:block ${isConnected ? 'bg-green-500 text-white' : isDarkMode ? 'text-slate-400 hover:text-white hover:bg-slate-700' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'}`}>
                 <Wallet className="w-4 h-4" />
               </button>
 
-              {/* Minimize/Maximize */}
               <button
                 onClick={() => setIsMinimized(!isMinimized)}
-                className={`p-2 rounded-lg transition-colors ${
-                  isDarkMode 
-                    ? 'text-slate-400 hover:text-white hover:bg-slate-700' 
-                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
-                }`}
-              >
+                className={`p-2 rounded-lg transition-colors ${isDarkMode ? 'text-slate-400 hover:text-white hover:bg-slate-700' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'}`}>
                 {isMinimized ? <Maximize2 className="w-4 h-4" /> : <Minimize2 className="w-4 h-4" />}
               </button>
 
-              {/* Close */}
               <button
                 onClick={onClose}
-                className={`p-2 rounded-lg transition-colors ${
-                  isDarkMode 
-                    ? 'text-slate-400 hover:text-white hover:bg-slate-700' 
-                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
-                }`}
-              >
+                className={`p-2 rounded-lg transition-colors ${isDarkMode ? 'text-slate-400 hover:text-white hover:bg-slate-700' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'}`}>
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -353,27 +313,20 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose, isDarkMode }) 
           {!isMinimized && (
             <>
               {/* Messages */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-4 h-[400px]">
+              <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {messages.map((message) => (
                   <motion.div
                     key={message.id}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                  >
+                    className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                     {message.role === 'assistant' && (
                       <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
                         <Bot className="w-4 h-4 text-white" />
                       </div>
                     )}
                     
-                    <div className={`max-w-[80%] p-3 rounded-2xl ${
-                      message.role === 'user'
-                        ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
-                        : isDarkMode
-                          ? 'bg-slate-700 text-white'
-                          : 'bg-gray-100 text-gray-900'
-                    }`}>
+                    <div className={`max-w-[80%] p-3 rounded-2xl ${message.role === 'user' ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white' : isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-900'}`}>
                       <p className="text-sm leading-relaxed">{message.content}</p>
                       <p className={`text-xs mt-1 opacity-70`}>
                         {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -389,17 +342,11 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose, isDarkMode }) 
                 ))}
 
                 {isLoading && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="flex gap-3 justify-start"
-                  >
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-3 justify-start">
                     <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                       <Bot className="w-4 h-4 text-white" />
                     </div>
-                    <div className={`p-3 rounded-2xl ${
-                      isDarkMode ? 'bg-slate-700' : 'bg-gray-100'
-                    }`}>
+                    <div className={`p-3 rounded-2xl ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'}`}>
                       <div className="flex gap-1">
                         <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
                         <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
@@ -419,16 +366,12 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose, isDarkMode }) 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
-                  >
+                    className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
                     <motion.div
                       initial={{ scale: 0.9, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       exit={{ scale: 0.9, opacity: 0 }}
-                      className={`w-full max-w-sm p-6 rounded-2xl ${
-                        isDarkMode ? 'bg-slate-800 border border-slate-700' : 'bg-white border border-gray-200'
-                      }`}
-                    >
+                      className={`w-full max-w-sm p-6 rounded-2xl ${isDarkMode ? 'bg-slate-800 border border-slate-700' : 'bg-white border border-gray-200'}`}>
                       <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                         Let's Connect!
                       </h3>
@@ -442,41 +385,27 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose, isDarkMode }) 
                           placeholder="Your name"
                           value={leadForm.name}
                           onChange={(e) => setLeadForm(prev => ({ ...prev, name: e.target.value }))}
-                          className={`w-full p-3 rounded-lg border ${
-                            isDarkMode 
-                              ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' 
-                              : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-                          } focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none`}
+                          className={`w-full p-3 rounded-lg border ${isDarkMode ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'} focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none`}
                         />
                         <input
                           type="email"
                           placeholder="Your email"
                           value={leadForm.email}
                           onChange={(e) => setLeadForm(prev => ({ ...prev, email: e.target.value }))}
-                          className={`w-full p-3 rounded-lg border ${
-                            isDarkMode 
-                              ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' 
-                              : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-                          } focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none`}
+                          className={`w-full p-3 rounded-lg border ${isDarkMode ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'} focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none`}
                         />
                       </div>
 
                       <div className="flex gap-3 mt-6">
                         <button
                           onClick={() => setShowLeadForm(false)}
-                          className={`flex-1 p-3 rounded-lg border transition-colors ${
-                            isDarkMode 
-                              ? 'border-slate-600 text-slate-300 hover:bg-slate-700' 
-                              : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                          }`}
-                        >
+                          className={`flex-1 p-3 rounded-lg border transition-colors ${isDarkMode ? 'border-slate-600 text-slate-300 hover:bg-slate-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
                           Cancel
                         </button>
                         <button
                           onClick={handleLeadSubmit}
                           disabled={!leadForm.name.trim() || !leadForm.email.trim()}
-                          className="flex-1 p-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                        >
+                          className="flex-1 p-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all">
                           Connect
                         </button>
                       </div>
@@ -486,7 +415,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose, isDarkMode }) 
               </AnimatePresence>
 
               {/* Input */}
-              <div className={`p-4 border-t ${isDarkMode ? 'border-slate-700/50' : 'border-gray-200/50'}`}>
+              <div className={`p-3 md:p-4 border-t ${isDarkMode ? 'border-slate-700/50' : 'border-gray-200/50'}`}>
                 <div className="flex gap-2">
                   <div className="flex-1 relative">
                     <input
@@ -495,25 +424,13 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose, isDarkMode }) 
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                      placeholder="Ask me anything about Farhan..."
-                      className={`w-full p-3 pr-12 rounded-xl border ${
-                        isDarkMode 
-                          ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' 
-                          : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-                      } focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none`}
+                      placeholder="Ask me anything..."
+                      className={`w-full p-3 pr-12 rounded-xl border text-sm ${isDarkMode ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'} focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none`}
                     />
                     
-                    {/* Voice Input Button */}
                     <button
                       onClick={handleVoiceToggle}
-                      className={`absolute right-3 top-1/2 transform -translate-y-1/2 p-1 rounded-lg transition-colors ${
-                        isListening
-                          ? 'text-red-500 animate-pulse'
-                          : isDarkMode 
-                            ? 'text-slate-400 hover:text-white' 
-                            : 'text-gray-500 hover:text-gray-700'
-                      }`}
-                    >
+                      className={`absolute right-3 top-1/2 transform -translate-y-1/2 p-1 rounded-lg transition-colors ${isListening ? 'text-red-500 animate-pulse' : isDarkMode ? 'text-slate-400 hover:text-white' : 'text-gray-500 hover:text-gray-700'}`}>
                       {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
                     </button>
                   </div>
@@ -521,13 +438,11 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose, isDarkMode }) 
                   <button
                     onClick={handleSendMessage}
                     disabled={!inputValue.trim() || isLoading}
-                    className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                  >
+                    className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all">
                     <Send className="w-4 h-4" />
                   </button>
                 </div>
 
-                {/* Status Indicators */}
                 <div className="flex items-center justify-between mt-2 text-xs">
                   <div className="flex items-center gap-4">
                     {isConnected && (
@@ -544,7 +459,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose, isDarkMode }) 
                     )}
                   </div>
                   
-                  <span className={isDarkMode ? 'text-slate-500' : 'text-gray-400'}>
+                  <span className={`${isDarkMode ? 'text-slate-500' : 'text-gray-400'} hidden md:inline`}>
                     Powered by OpenAI
                   </span>
                 </div>

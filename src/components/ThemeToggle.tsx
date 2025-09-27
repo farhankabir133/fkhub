@@ -1,31 +1,61 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Sun, Moon } from 'lucide-react';
-import { useTheme } from '../hooks/useTheme';
 
 const ThemeToggle: React.FC = () => {
-  const { isDark, toggleTheme } = useTheme();
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    // Check for saved theme in localStorage, otherwise use system preference
+    if (typeof window !== 'undefined') {
+      const storedTheme = localStorage.getItem('theme');
+      if (storedTheme) {
+        return storedTheme === 'dark';
+      }
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    // Apply the theme class to the root element
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDarkMode]);
+
+  const toggleTheme = () => {
+    setIsDarkMode(prev => !prev);
+  };
 
   return (
-    <motion.button
-      onClick={toggleTheme}
-      className="fixed top-6 right-6 z-50 p-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-full shadow-lg hover:bg-white/20 transition-colors duration-300"
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.95 }}
-      data-cursor="pointer"
-    >
-      <motion.div
-        initial={false}
-        animate={{ rotate: isDark ? 180 : 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        {isDark ? (
-          <Sun className="w-5 h-5 text-amber-400" />
-        ) : (
-          <Moon className="w-5 h-5 text-slate-700" />
-        )}
-      </motion.div>
-    </motion.button>
+    <div className="relative flex items-center justify-center">
+        <motion.button
+            onClick={toggleTheme}
+            className="p-2 rounded-full transition-colors duration-300
+                    text-slate-700 dark:text-amber-400 
+                    hover:bg-slate-200/70 dark:hover:bg-slate-700/70 
+                    focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 
+                    focus:ring-offset-slate-100 dark:focus:ring-offset-slate-800"
+            whileTap={{ scale: 0.9, rotate: 15 }}
+            aria-label="Toggle theme"
+            data-cursor="pointer"
+        >
+            <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                    key={isDarkMode ? "moon" : "sun"}
+                    initial={{ y: -20, opacity: 0, rotate: -90 }}
+                    animate={{ y: 0, opacity: 1, rotate: 0 }}
+                    exit={{ y: 20, opacity: 0, rotate: 90 }}
+                    transition={{ duration: 0.2 }}
+                >
+                    {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+                </motion.div>
+            </AnimatePresence>
+        </motion.button>
+    </div>
   );
 };
 

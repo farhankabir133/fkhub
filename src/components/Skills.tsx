@@ -22,8 +22,10 @@ const Skills: React.FC = () => {
 
   return (
     <section id="skills" className="relative py-20 bg-slate-50 dark:bg-slate-800 transition-colors duration-300 overflow-hidden">
-      {/* Virtual Terminal Animated Background */}
-      <VirtualTerminalBackground />
+      {/* Virtual Terminal Animated Background - Hidden on mobile */}
+      <div className="hidden md:block">
+        <VirtualTerminalBackground />
+      </div>
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           ref={ref}

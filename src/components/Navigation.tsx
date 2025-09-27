@@ -1,19 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 
 const Navigation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const navItems = [
     { name: 'Home', href: '#home' },
@@ -33,112 +24,104 @@ const Navigation: React.FC = () => {
     setIsOpen(false);
   };
 
+  const menuVariants = {
+    open: { opacity: 1, scale: 1, transition: { staggerChildren: 0.07, delayChildren: 0.2 } },
+    closed: { opacity: 0, scale: 0.95 },
+  };
+
+  const navItemVariants = {
+    open: { y: 0, opacity: 1, transition: { y: { stiffness: 1000, velocity: -100 } } },
+    closed: { y: 50, opacity: 0, transition: { y: { stiffness: 1000 } } },
+  };
+
   return (
     <>
+      {/* --- Desktop Floating Capsule Nav --- */}
       <motion.nav
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500
-          ${scrolled ?
-            'bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl shadow-2xl border-b border-white/30 dark:border-slate-700/40'
-            : 'bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl border-b border-transparent'}
-        `}
-        style={{
-          boxShadow: scrolled ?
-            '0 8px 32px 0 rgba(31, 38, 135, 0.18), 0 2px 8px 0 rgba(245, 158, 11, 0.16)' :
-            '0 2px 8px 0 rgba(245, 158, 11, 0.08)',
-          background: scrolled
-            ? 'linear-gradient(90deg, rgba(255, 247, 237, 0.92) 0%, rgba(255, 237, 213, 0.92) 100%)'
-            : 'linear-gradient(90deg, rgba(255, 255, 255, 0.70) 0%, rgba(255, 237, 213, 0.50) 100%)',
-          backdropFilter: scrolled ? 'blur(28px)' : 'blur(20px)',
-          transition: 'all 0.5s cubic-bezier(.4,0,.2,1)',
-        }}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6 }}
+        className="hidden md:flex fixed top-4 left-1/2 z-50 items-center justify-between p-2 rounded-full border shadow-lg
+                   bg-white/60 border-slate-200/80 backdrop-blur-lg
+                   dark:bg-slate-800/60 dark:border-slate-700/70"
+        style={{ transform: 'translateX(-50%)' }}
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, type: 'spring', stiffness: 120, damping: 20 }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          {/* Animated Gradient Border at Bottom */}
-          <div className="absolute left-0 right-0 bottom-0 h-1 pointer-events-none z-50 overflow-hidden">
-            <div className="w-full h-full animate-gradient-x"
-              style={{
-                background: 'linear-gradient(270deg, #f59e0b, #ea580c, #f59e0b, #fbbf24)',
-                backgroundSize: '600% 600%',
-                filter: 'blur(2.5px)',
-                opacity: 0.7,
-                transition: 'opacity 0.5s cubic-bezier(.4,0,.2,1)',
-              }}
-            />
-          </div>
-          <div className="flex justify-between items-center h-16 relative">
-            <motion.div
-              className="text-2xl font-extrabold tracking-wide bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent drop-shadow-md"
-              whileHover={{ scale: 1.05 }}
-            >
-              Farhan Kabir
-            </motion.div>
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex space-x-8">
-              {navItems.map((item, index) => (
-                <motion.button
-                  key={item.name}
-                  onClick={() => scrollToSection(item.href)}
-                  className="text-black hover:text-amber-500 transition-colors duration-200 font-semibold tracking-wide px-3 py-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-none"
-                  whileHover={{ y: -2 }}
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  data-cursor="pointer"
-                >
-                  {item.name}
-                </motion.button>
-              ))}
-            </div>
-            {/* Mobile Menu Button */}
+        <motion.div className="text-lg font-bold tracking-wide bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent pl-4 pr-2">
+          Farhan Kabir
+        </motion.div>
+
+        <div className="flex items-center space-x-1 pr-1">
+          {navItems.map((item) => (
             <motion.button
-              onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 text-black bg-white/70 rounded-full shadow hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
+              key={item.name}
+              onClick={() => scrollToSection(item.href)}
+              className="text-slate-800 dark:text-slate-200 hover:text-amber-500 dark:hover:text-amber-400 transition-colors duration-200 font-medium tracking-wide px-3 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-amber-400"
+              whileHover={{ y: -2 }}
               data-cursor="pointer"
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {item.name}
             </motion.button>
-          </div>
+          ))}
+          <ThemeToggle />
         </div>
       </motion.nav>
 
-      {/* Mobile Menu */}
+      {/* --- Mobile Floating Menu Button --- */}
+      <motion.button
+        onClick={() => setIsOpen(!isOpen)}
+        className="md:hidden fixed top-5 right-5 z-50 p-3 rounded-full shadow-lg
+                   bg-white/80 dark:bg-slate-800/80 backdrop-blur-md
+                   focus:outline-none ring-2 ring-amber-400/50"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        data-cursor="pointer"
+      >
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={isOpen ? 'x' : 'menu'}
+            initial={{ rotate: 45, opacity: 0 }}
+            animate={{ rotate: 0, opacity: 1 }}
+            exit={{ rotate: -45, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            {isOpen ? <X className="w-6 h-6 text-slate-800 dark:text-slate-200" /> : <Menu className="w-6 h-6 text-slate-800 dark:text-slate-200" />}
+          </motion.div>
+        </AnimatePresence>
+      </motion.button>
+
+      {/* --- Mobile Full-Screen Overlay Menu --- */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed inset-0 z-30 md:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            className="md:hidden fixed inset-0 z-40 bg-slate-100 dark:bg-slate-900 flex flex-col items-center justify-center"
+            variants={menuVariants}
+            initial="closed"
+            animate="open"
+            exit="closed"
           >
-            <div className="absolute inset-0 bg-black/50" onClick={() => setIsOpen(false)} />
-            <motion.div
-              className="absolute top-16 left-0 right-0 bg-white dark:bg-slate-900 shadow-lg"
-              initial={{ y: -100, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -100, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="px-4 py-6 space-y-4">
-                {navItems.map((item, index) => (
-                  <motion.button
-                    key={item.name}
-                    onClick={() => scrollToSection(item.href)}
-                    className="block w-full text-left px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-amber-500 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-slate-800 rounded-lg transition-colors duration-200 font-medium"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    data-cursor="pointer"
-                  >
-                    {item.name}
-                  </motion.button>
-                ))}
-              </div>
+            <motion.div className="text-3xl font-bold tracking-wide bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent absolute top-16">
+              Farhan Kabir
             </motion.div>
+
+            <motion.ul
+              className="flex flex-col items-center justify-center space-y-4"
+              variants={menuVariants}
+            >
+                {navItems.map((item) => (
+                <motion.li key={item.name} variants={navItemVariants}>
+                  <button
+                      onClick={() => scrollToSection(item.href)}
+                      className="w-full text-center py-3 text-2xl text-slate-700 dark:text-slate-300 hover:text-amber-500 dark:hover:text-amber-400 font-semibold tracking-wider"
+                      data-cursor="pointer"
+                  >
+                      {item.name}
+                  </button>
+                </motion.li>
+                ))}
+            </motion.ul>
+            <div className="absolute bottom-8">
+              <ThemeToggle />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -147,12 +130,3 @@ const Navigation: React.FC = () => {
 };
 
 export default Navigation;
-
-// Tailwind animation utility (add to your global CSS if not present):
-// .animate-gradient-x {
-//   animation: gradient-x 4s ease-in-out infinite;
-// }
-// @keyframes gradient-x {
-//   0%, 100% { background-position: 0% 50%; }
-//   50% { background-position: 100% 50%; }
-// }
