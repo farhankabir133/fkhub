@@ -48,7 +48,7 @@ const About: React.FC = () => {
                 transition={{ duration: 6, repeat: Infinity, repeatType: 'mirror' }}
               />
               <img
-                src="https://images.pexels.com/photos/33137271/pexels-photo-33137271.png?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop"
+                src="https://images.pexels.com/photos/34067041/pexels-photo-34067041.png"
                 alt="Farhan Kabir"
                 className="relative w-full h-auto object-cover rounded-2xl shadow-2xl transform md:rotate-3 hover:rotate-0 transition-transform duration-300"
               />

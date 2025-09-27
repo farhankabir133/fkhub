@@ -3,9 +3,7 @@ import { motion } from 'framer-motion';
 import { ChevronDown, Download } from 'lucide-react';
 import GravityCodeOrbsBackground from './GravityCodeOrbsBackground';
 
-// Main Hero Section
 const Hero: React.FC = () => {
-  // Scroll to next section
   const scrollToNext = () => {
     const nextSection = document.getElementById('about');
     if (nextSection) {
@@ -15,7 +13,6 @@ const Hero: React.FC = () => {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
-      {/* Gravity Code Orbs Animated Background */}
       <GravityCodeOrbsBackground />
       <div className="relative z-10 flex flex-col items-center justify-center w-full h-full pt-32 pb-16">
         <motion.div
@@ -42,7 +39,7 @@ const Hero: React.FC = () => {
           Farhan Kabir
         </motion.h1>
         <motion.div
-          className="text-xl md:text-2xl text-slate-300 mb-8 h-8"
+          className="text-xl md:text-2xl text-slate-300 mb-8 text-center px-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.4 }}
@@ -57,7 +54,7 @@ const Hero: React.FC = () => {
           </motion.span>
         </motion.div>
         <motion.p
-          className="text-lg text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed text-center"
+          className="text-lg text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed text-center px-4"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
@@ -96,7 +93,6 @@ const Hero: React.FC = () => {
             Download Resume
           </motion.a>
         </motion.div>
-        {/* Place the scroll/cursor button directly under the download button, centered and spaced */}
         <motion.div
           className="flex flex-col items-center mt-8"
           initial={{ opacity: 0, y: 20 }}
