@@ -347,34 +347,62 @@ const GravityCodeOrbsBackground: React.FC = () => {
         style={{ zIndex: 1 }}
       />
       {/* Customization UI for first orb and speed */}
-      <div className="absolute top-4 left-4 bg-black/70 rounded-xl p-3 md:p-4 z-20 flex flex-col gap-3 text-white shadow-lg md:min-w-[240px]">
-        <div className="font-bold mb-1 hidden md:block">Customize Main Orb</div>
-        <div className="hidden md:flex gap-2 mb-2">
-          {COLORS.map(c => (
-            <button key={c} className="w-6 h-6 rounded-full border-2" style={{ background: c, borderColor: ui.color === c ? '#fff' : 'transparent' }} onClick={() => handleColor(c)} />
-          ))}
-        </div>
-        <div className="hidden md:flex gap-2 mb-2">
-          {(['circle', 'hex', 'cube'] as const).map(shape => (
-            <button key={shape} className={`px-2 py-1 rounded ${ui.shape === shape ? 'bg-amber-400 text-black' : 'bg-slate-700'}`} onClick={() => handleShape(shape)}>{shape}</button>
-          ))}
-        </div>
-        <textarea className="w-full bg-slate-900 rounded p-2 text-xs text-white hidden md:block" rows={3} value={ui.code} onChange={handleCode} />
-        <div className="flex flex-col gap-1">
-          <label htmlFor="orb-speed-slider" className="text-xs font-semibold">Orb Speed: <span className="text-amber-400">{speed.toFixed(1)}x</span></label>
-          <input
-            id="orb-speed-slider"
-            type="range"
-            min={0.2}
-            max={3}
-            step={0.1}
-            value={speed}
-            onChange={e => setSpeed(Number(e.target.value))}
-            className="w-full accent-amber-400"
-          />
-          <div className="text-xs text-slate-400 hidden md:block">Use <kbd>+</kbd>/<kbd>-</kbd> to adjust speed</div>
-        </div>
-      </div>
+{/* Customization UI for first orb and speed */}
+<div className="absolute top-4 left-4 rounded-xl p-3 md:p-4 z-20 flex flex-col gap-3 
+  bg-white/70 text-gray-900 shadow-lg backdrop-blur-md 
+  dark:bg-black/70 dark:text-white md:min-w-[240px]">
+
+  <div className="font-bold mb-1 hidden md:block">Customize Main Orb</div>
+
+  <div className="hidden md:flex gap-2 mb-2">
+    {COLORS.map(c => (
+      <button
+        key={c}
+        className="w-6 h-6 rounded-full border-2"
+        style={{ background: c, borderColor: ui.color === c ? '#000' : 'transparent' }}
+        onClick={() => handleColor(c)}
+      />
+    ))}
+  </div>
+
+  <div className="hidden md:flex gap-2 mb-2">
+    {(['circle', 'hex', 'cube'] as const).map(shape => (
+      <button
+        key={shape}
+        className={`px-2 py-1 rounded ${ui.shape === shape ? 'bg-amber-400 text-black' : 'bg-slate-200 dark:bg-slate-700'}`}
+        onClick={() => handleShape(shape)}
+      >
+        {shape}
+      </button>
+    ))}
+  </div>
+
+  <textarea
+    className="w-full bg-slate-100 dark:bg-slate-900 rounded p-2 text-xs text-gray-800 dark:text-white hidden md:block"
+    rows={3}
+    value={ui.code}
+    onChange={handleCode}
+  />
+
+  <div className="flex flex-col gap-1">
+    <label htmlFor="orb-speed-slider" className="text-xs font-semibold">
+      Orb Speed: <span className="text-amber-500">{speed.toFixed(1)}x</span>
+    </label>
+    <input
+      id="orb-speed-slider"
+      type="range"
+      min={0.2}
+      max={3}
+      step={0.1}
+      value={speed}
+      onChange={e => setSpeed(Number(e.target.value))}
+      className="w-full accent-amber-500"
+    />
+    <div className="text-xs text-gray-600 dark:text-slate-400 hidden md:block">
+      Use <kbd>+</kbd>/<kbd>-</kbd> to adjust speed
+    </div>
+  </div>
+</div>
     </>
   );
 };

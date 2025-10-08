@@ -263,6 +263,12 @@ If you found this project helpful, please consider:
 </div>
 
 
+###Important Build Commands for production
+rm -rf dist
+npm run build
+firebase deploy --only hosting
+
+
 
 
 

@@ -39,6 +39,7 @@ const Chatbot: React.FC = () => {
             isOpen={isOpen}
             onClick={handleToggle}
             hasUnreadMessages={hasUnreadMessages}
+            isDarkMode={isDark}
           />
           <ChatWindow
             isOpen={isOpen}

@@ -12,7 +12,7 @@ if (!projectId) {
 const metadata = {
   name: 'Farhan Kabir Portfolio',
   description: 'AI Assistant with Web3 Integration',
-  url: 'https://farhankabir.netlify.app',
+  url: 'https://farhankabir.web.app',
   icons: ['https://farhankabir.netlify.app/favicon.ico']
 };
 

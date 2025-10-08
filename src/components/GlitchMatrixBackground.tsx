@@ -122,7 +122,6 @@ const GlitchMatrixBackground: React.FC = () => {
       ctx.rect(b.x + (glitch ? randomBetween(-8, 8) : 0), b.y + (glitch ? randomBetween(-8, 8) : 0), b.w, b.h);
       ctx.fill();
       ctx.stroke();
-      ctx.font = 'bold 15px monospace';
       ctx.fillStyle = b.decrypt ? '#fff' : '#00fff7';
       ctx.globalAlpha = 1;
       ctx.fillText(b.code, b.x + 12, b.y + b.h / 1.6);
@@ -133,7 +132,6 @@ const GlitchMatrixBackground: React.FC = () => {
       if (!easterEgg) return;
       ctx.save();
       ctx.globalAlpha = 1;
-      ctx.font = 'bold 32px monospace';
       ctx.fillStyle = '#f59e42';
       ctx.shadowColor = '#fff';
       ctx.shadowBlur = 32;
@@ -177,7 +175,7 @@ const GlitchMatrixBackground: React.FC = () => {
       {/* System hack button for accessibility */}
       <button
         onClick={triggerSystemHack}
-        className="absolute top-4 right-4 z-10 bg-black/70 text-amber-400 px-4 py-2 rounded-lg font-mono text-xs shadow-lg hover:bg-amber-400 hover:text-black transition"
+        className="absolute top-4 right-4 z-10 bg-black/70 text-amber-400 px-4 py-2 rounded-lg text-xs shadow-lg hover:bg-amber-400 hover:text-black transition"
         style={{ pointerEvents: 'auto' }}
       >
         System Hack

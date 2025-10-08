@@ -4,8 +4,11 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
-      fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+      screens: {
+        'fold': '280px', // For very narrow screens like folded devices
+        'xs': '480px',   // Extra small devices
+        '3xl': '1920px', // For Full HD screens
+        '4k': '2560px',  // For 4K displays
       },
       animation: {
         'float': 'float 6s ease-in-out infinite',
