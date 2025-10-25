@@ -21,21 +21,51 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 transition-colors duration-500 light-mode">
+      {/* Custom animated cursor */}
       <CustomCursor />
+
+      {/* Site Navigation Bar */}
       <Navigation />
-      <AnimatePresence>
-        <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }} className="section-container">
+
+      {/* Animated Main Content */}
+      <AnimatePresence mode="wait">
+        <motion.main
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.6, ease: 'easeInOut' }}
+          className="section-container"
+        >
+          {/* Hero Section */}
           <Hero />
+
+          {/* About Section */}
           <About />
+
+          {/* Skills Section */}
           <Skills />
+
+          {/* Portfolio Section */}
           <Portfolio />
+
+          {/* Testimonials Section */}
           <Testimonials />
+
+          {/* Blog Section */}
           <Blog />
+
+          {/* Contact Section */}
           <Contact />
         </motion.main>
       </AnimatePresence>
+
+      {/* Footer Section */}
       <Footer />
+
+      {/* Chatbot Widget */}
       <Chatbot />
+
+      {/* Admin Dashboard (optional visibility logic can be added later) */}
       <AdminDashboard />
     </div>
   );

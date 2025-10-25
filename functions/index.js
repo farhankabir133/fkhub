@@ -16,16 +16,12 @@ const setCorsHeaders = (res) => {
 // KB Integration Function
 // -----------------------------
 async function getKBContext(userMessage) {
-  // TODO: Replace this static KB with dynamic fetch from your database or JSON
   const kbEntries = [
     "Farhan Kabir is a full-stack software developer.",
     "He specializes in Flutter, Node.js, Web3, and AI projects.",
     "He has built portfolio websites, music apps, and chatbots.",
     "He is available for freelance work and consultations."
   ];
-
-  // You can filter entries relevant to the user's message if you want
-  // For now, just join all entries
   return kbEntries.join("\n");
 }
 
@@ -54,22 +50,19 @@ exports.getGeminiResponse = onRequest({ secrets: ["GEMINI_API_KEY"] }, async (re
     const genAI = new GoogleGenerativeAI(geminiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
 
-    // Get dynamic KB context
     const kbContext = await getKBContext(message);
-
-    // Build the system prompt with KB
     const systemPrompt = `${getSystemPrompt()}\n\nKnowledge Base:\n${kbContext}`;
 
     const result = await model.generateContent({
-        contents: [
-          { role: "user", parts: [{ text: getSystemPrompt() + "\n" + message }] }
-        ]
-      });      
+      contents: [
+        { role: "user", parts: [{ text: getSystemPrompt() + "\n" + message }] }
+      ]
+    });
 
     console.log("Gemini API raw result:", JSON.stringify(result, null, 2));
 
     const text = result?.candidates?.[0]?.content?.parts?.[0]?.text
-              || result?.response?.candidates?.[0]?.content?.parts?.[0]?.text;
+      || result?.response?.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (!text) throw new Error("No text returned from Gemini API");
 
